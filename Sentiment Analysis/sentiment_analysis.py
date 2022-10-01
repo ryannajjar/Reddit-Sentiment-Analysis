@@ -27,6 +27,3 @@ class SubredditSA:
             post_doc = nlp(submission.title)
             print(post_doc._.blob.polarity)
             print()
-
-sa_test = SubredditSA('chess')
-sa_test.title('hot', 10)
