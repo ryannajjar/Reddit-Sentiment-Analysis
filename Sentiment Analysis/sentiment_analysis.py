@@ -35,6 +35,9 @@ class SubredditSA:
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
             print(submission.selftext)
             print('\n' * 2)
-            postbody_doc = nlp(submission.title)
+            postbody_doc = nlp(submission.selftext)
             print(f'The body of this post has a sentiment of: {postbody_doc._.blob.polarity}')
             print('*' * 100 + '\n' * 2 + '*' * 100)
+
+test = SubredditSA('chess')
+test.body('hot', 7)
