@@ -38,6 +38,3 @@ class SubredditSA:
             postbody_doc = nlp(submission.selftext)
             print(f'The body of this post has a sentiment of: {postbody_doc._.blob.polarity}')
             print('*' * 100 + '\n' * 2 + '*' * 100)
-
-test = SubredditSA('chess')
-test.body('hot', 7)
