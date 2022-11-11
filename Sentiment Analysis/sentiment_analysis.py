@@ -75,7 +75,3 @@ class SubredditSA:
             print('\n' * 2 + '[]' * 50 + '\n' * 2)
             print(f'The sentiment of the people is: {total_sentiment}')
             print('\n' * 2 + '[]' * 50 + '\n' * 2)
-
-
-test = SubredditSA('chess')
-test.top_comments('hot', 2)
