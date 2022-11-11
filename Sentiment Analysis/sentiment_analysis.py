@@ -4,8 +4,6 @@ from creds import *
 import spacy
 from spacytextblob.spacytextblob import SpacyTextBlob
 
-import requests
-
 
 reddit = praw.Reddit(
     client_id=CLIENT_ID,
