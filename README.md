@@ -1,4 +1,4 @@
-# **Reddit API Project Collection**
+# **Reddit API Collection**
 
 *This is a repository of projects* that use the PRAW Reddit API.
 ___
