@@ -1,6 +1,7 @@
 # **Reddit API Project Collection**
 
-## This is a repository of projects that use the PRAW Reddit API.
+*This is a repository of projects* that use the PRAW Reddit API.
+___
 
 ### <u> Project #1: "Sentiment Analysis" </u>
 
