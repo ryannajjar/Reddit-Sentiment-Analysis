@@ -2,8 +2,6 @@
 
 ## This is a repository of projects that use the PRAW Reddit API.
 
-<br>
-
 ### <u> Project #1: "Sentiment Analysis" </u>
 
 <br>
