@@ -33,7 +33,7 @@ class SubredditSA:
             print('*' * 100 + '\n' * 2 + '*' * 100 + '\n')
 
     """Runs sentiment analysis on a specified amount of Reddit posts' body under hot, new, top, or rising."""
-    def body(self, post_relevance, num_posts): # method is not complete, fix so that it includes images
+    def body(self, post_relevance, num_posts): # method is not complete, change after to include images after finishing class
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
             print(f'Title of the post: {submission.title}')
             print('\n' * 2 + '[]' * 50 + '\n' * 2)
