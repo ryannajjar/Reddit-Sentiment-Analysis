@@ -45,7 +45,8 @@ class SubredditSA:
 
     """Runs sentiment analysis on the top comments of a reddit post, and averages the values to get a total idea of the sentiment."""
     def top_comments(self, post_relevance, num_posts):
-        sentiment_values = []
+        avg_sentiment = 0
+        comments_analyzed = 0
         
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
             print(f'Title of the post: {submission.title}')
@@ -63,10 +64,11 @@ class SubredditSA:
                     print(top_level_comment.body)
                     posttitle_doc = nlp(top_level_comment.body)
                     print(f'This comment has a sentiment of: {posttitle_doc._.blob.polarity}')
-                    sentiment_values.append(posttitle_doc._.blob.polarity)
+                    avg_sentiment += posttitle_doc._.blob.polarity
+                    comments_analyzed += 1
                     print('\n' + '*' * 100 + '\n')
 
-            avg_sentiment = sum(sentiment_values) / len(sentiment_values)
+            avg_sentiment /= comments_analyzed
             print('\n' * 2 + '[]' * 50 + '\n' * 2)
             print(f'The sentiment of the people is: {avg_sentiment}')
             print('\n' * 2 + '[]' * 50 + '\n' * 2)
