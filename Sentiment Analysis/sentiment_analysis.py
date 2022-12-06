@@ -45,12 +45,13 @@ class SubredditSA:
 
     """Runs sentiment analysis on the top comments of a reddit post, and averages the values to get a total idea of the sentiment."""
     def top_comments(self, post_relevance, num_posts):
-        avg_sentiment = 0
-        comments_analyzed = 0
-        
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
+            avg_sentiment = 0
+            comments_analyzed = 0
+
             print(f'Title of the post: {submission.title}')
             print('\n' * 2 + '[]' * 50 + '\n' * 2)
+            
             for top_level_comment in submission.comments:
                 if top_level_comment.body == '[deleted]':
                     print(top_level_comment.body)
