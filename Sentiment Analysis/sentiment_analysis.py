@@ -111,8 +111,9 @@ class SubredditSA:
             for reply in comment_replies_in_level:
                 print(reply.body)
                 posttitle_doc = nlp(reply.body)
-                print(f'This comment reply has a sentiment of: {posttitle_doc._.blob.polarity}')
-                avg_sentiment += posttitle_doc._.blob.polarity
+                sentiment_value = posttitle_doc._.blob.polarity / 3
+                print(f'This comment reply has a sentiment of: {sentiment_value}')
+                avg_sentiment += sentiment_value
                 comment_replies_analyzed += 1
                 print('\n' + '*' * 100 + '\n')
 
