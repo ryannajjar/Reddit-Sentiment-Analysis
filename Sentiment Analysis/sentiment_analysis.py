@@ -73,7 +73,10 @@ class SubredditSA:
                     comments_analyzed += 1
                     print('\n' + '*' * 100 + '\n')
 
-            avg_sentiment /= comments_analyzed
-            print('\n' * 2 + '[]' * 50 + '\n' * 2)
-            print(f'The sentiment of the people is: {avg_sentiment}')
-            print('\n' * 2 + '[]' * 50 + '\n' * 2)
+            if comments_analyzed == 0:
+                print('There are no comments to analyze in this Reddit post.')
+            else:
+                avg_sentiment /= comments_analyzed
+                print('\n' * 2 + '[]' * 50 + '\n' * 2)
+                print(f'The sentiment of the people is: {avg_sentiment}')
+                print('\n' * 2 + '[]' * 50 + '\n' * 2)
