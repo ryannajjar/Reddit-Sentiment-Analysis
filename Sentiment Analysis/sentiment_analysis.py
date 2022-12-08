@@ -78,8 +78,8 @@ class SubredditSA:
             print(f'The sentiment of the people is: {avg_sentiment}')
             print('\n' * 2 + '[]' * 50 + '\n' * 2)
     
-    """Runs sentiment analysis on the sub comments of a reddit post, and averages the values to get a total idea of the sentiment."""
     def sub_comments(self, post_relevance, num_posts, level=2):
+        """Runs sentiment analysis on the sub comments of a reddit post, and averages the values to get a total idea of the sentiment."""
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
             avg_sentiment = 0
             comment_replies_analyzed = 0
@@ -88,7 +88,7 @@ class SubredditSA:
             print('\n' * 2 + '[]' * 50 + '\n' * 2)
 
             comment_replies_in_level = []
-            for comment in submission.comments:
+            for comment in self._only_comments(submission.comments):
                 queue = deque([comment])
                 visited = {comment}
                 depth_counter = 1
@@ -97,7 +97,7 @@ class SubredditSA:
                     for _ in range(len(queue)):
                         comment = queue.popleft()                            
 
-                        for comment_reply in comment.replies:
+                        for comment_reply in self._only_comments(comment.replies):
                             if comment_reply not in visited:
                                 visited.add(comment_reply)
                                 queue.append(comment_reply)
@@ -109,9 +109,9 @@ class SubredditSA:
                 comment_replies_in_level += queue
                     
             # Process comment replies in desired level
-            for reply in comment_replies_in_level:
-                print(reply.body)
-                postcommentreply_doc = nlp(reply.body)
+            for comment_reply in comment_replies_in_level:
+                print(comment_reply.body)
+                postcommentreply_doc = nlp(comment_reply.body)
                 sentiment_value = postcommentreply_doc._.blob.polarity / 3
                 print(f'This comment reply has a sentiment of: {sentiment_value}')
                 avg_sentiment += sentiment_value
@@ -125,6 +125,14 @@ class SubredditSA:
                 print('\n' * 2 + '[]' * 50 + '\n' * 2)
                 print(f'The sentiment of the people is: {avg_sentiment}')
                 print('\n' * 2 + '[]' * 50 + '\n' * 2)
+    
+    def _only_comments(self, comments_obj):
+        """Deals with errors relating to MoreComments, to yield only comments"""
+        comments_obj.replace_more()
+        for comment in comments_obj:
+            if isinstance(comment, MoreComments):
+                continue
+            yield comment
 
 
 test = SubredditSA('chess')
