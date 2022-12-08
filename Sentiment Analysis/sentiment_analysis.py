@@ -1,5 +1,6 @@
 import praw
 from creds import *
+from praw.models import MoreComments
 
 import spacy
 from spacytextblob.spacytextblob import SpacyTextBlob
@@ -66,9 +67,9 @@ class SubredditSA:
                     print('\n' + '*' * 100 + '\n')
                 else:
                     print(top_level_comment.body)
-                    posttitle_doc = nlp(top_level_comment.body)
-                    print(f'This comment has a sentiment of: {posttitle_doc._.blob.polarity}')
-                    avg_sentiment += posttitle_doc._.blob.polarity
+                    postcomment_doc = nlp(top_level_comment.body)
+                    print(f'This comment has a sentiment of: {postcomment_doc._.blob.polarity}')
+                    avg_sentiment += postcomment_doc._.blob.polarity
                     comments_analyzed += 1
                     print('\n' + '*' * 100 + '\n')
 
@@ -110,8 +111,8 @@ class SubredditSA:
             # Process comment replies in desired level
             for reply in comment_replies_in_level:
                 print(reply.body)
-                posttitle_doc = nlp(reply.body)
-                sentiment_value = posttitle_doc._.blob.polarity / 3
+                postcommentreply_doc = nlp(reply.body)
+                sentiment_value = postcommentreply_doc._.blob.polarity / 3
                 print(f'This comment reply has a sentiment of: {sentiment_value}')
                 avg_sentiment += sentiment_value
                 comment_replies_analyzed += 1
