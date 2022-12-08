@@ -56,7 +56,7 @@ class SubredditSA:
             print(f'Title of the post: {submission.title}')
             print('\n' * 2 + '[]' * 50 + '\n' * 2)
 
-            for top_level_comment in submission.comments:
+            for top_level_comment in self._only_comments(submission.comments):
                 if top_level_comment.body == '[deleted]':
                     print(top_level_comment.body)
                     print('UNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS DELETED')
