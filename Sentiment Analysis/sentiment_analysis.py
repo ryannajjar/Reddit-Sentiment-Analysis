@@ -117,11 +117,14 @@ class SubredditSA:
                 comment_replies_analyzed += 1
                 print('\n' + '*' * 100 + '\n')
 
-            avg_sentiment /= comment_replies_analyzed
-            print('\n' * 2 + '[]' * 50 + '\n' * 2)
-            print(f'The sentiment of the people is: {avg_sentiment}')
-            print('\n' * 2 + '[]' * 50 + '\n' * 2)
+            if comment_replies_analyzed == 0:
+                print(f'There are no sub comments in the Reddit post on level {level} to analyze.')
+            else:
+                avg_sentiment /= comment_replies_analyzed
+                print('\n' * 2 + '[]' * 50 + '\n' * 2)
+                print(f'The sentiment of the people is: {avg_sentiment}')
+                print('\n' * 2 + '[]' * 50 + '\n' * 2)
 
 
 test = SubredditSA('chess')
-test.sub_comments('hot', 1, 3)
+test.sub_comments('hot', 10, 3)
