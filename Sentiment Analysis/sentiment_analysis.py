@@ -110,13 +110,22 @@ class SubredditSA:
                     
             # Process comment replies in desired level
             for comment_reply in comment_replies_in_level:
-                print(comment_reply.body)
-                postcommentreply_doc = nlp(comment_reply.body)
-                sentiment_value = postcommentreply_doc._.blob.polarity / 3
-                print(f'This comment reply has a sentiment of: {sentiment_value}')
-                avg_sentiment += sentiment_value
-                comment_replies_analyzed += 1
-                print('\n' + '*' * 100 + '\n')
+                if comment_reply.body == '[deleted]':
+                    print(comment_reply.body)
+                    print('UNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS DELETED')
+                    print('\n' + '*' * 100 + '\n')
+                elif comment_reply.body == '[removed]':
+                    print(comment_reply.body)
+                    print('UNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS REMOVED')
+                    print('\n' + '*' * 100 + '\n')
+                else:
+                    print(comment_reply.body)
+                    postcommentreply_doc = nlp(comment_reply.body)
+                    sentiment_value = postcommentreply_doc._.blob.polarity / 3
+                    print(f'This comment reply has a sentiment of: {sentiment_value}')
+                    avg_sentiment += sentiment_value
+                    comment_replies_analyzed += 1
+                    print('\n' + '*' * 100 + '\n')
 
             if comment_replies_analyzed == 0:
                 print(f'There are no sub comments in the Reddit post on level {level} to analyze.')
@@ -136,4 +145,4 @@ class SubredditSA:
 
 
 test = SubredditSA('chess')
-test.sub_comments('hot', 10, 3)
+test.sub_comments('hot', 10, 4)
