@@ -62,7 +62,7 @@ class SubredditSA:
     def top_comments(self, post_relevance, num_posts):
         """Runs sentiment analysis on the top comments of a reddit post, and averages the values to get a total idea of the sentiment."""
 
-        f = open('comment__data.txt', 'w')
+        f = open('comment_data.txt', 'w')
 
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
             avg_sentiment = 0
