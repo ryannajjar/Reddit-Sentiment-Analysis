@@ -148,7 +148,3 @@ class SubredditSA:
             if isinstance(comment, MoreComments):
                 continue
             yield comment
-
-
-test = SubredditSA('chess')
-test.sub_comments('hot', 10, 4)
