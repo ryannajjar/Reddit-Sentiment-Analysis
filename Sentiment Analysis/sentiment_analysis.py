@@ -22,12 +22,14 @@ nlp.add_pipe('spacytextblob')
 
 
 class SubredditSA:
-    """Runs sentiment analysis on aspects of Reddit posts in a specific subreddit."""
     def __init__(self, subreddit):
+        """Runs sentiment analysis on aspects of Reddit posts in a specific subreddit."""
+
         self.subreddit = subreddit
     
-    """Runs sentiment analysis on a specified amount of Reddit posts' titles under hot, new, top, or rising."""
     def title(self, post_relevance, num_posts):
+        """Runs sentiment analysis on a specified amount of Reddit posts' titles under hot, new, top, or rising."""
+
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
             print(submission.title)
             print('\n' * 2)
@@ -35,8 +37,9 @@ class SubredditSA:
             print(f'The title of this post has a sentiment of: {posttitle_doc._.blob.polarity}')
             print('*' * 100 + '\n' * 2 + '*' * 100 + '\n')
 
-    """Runs sentiment analysis on a specified amount of Reddit posts' body under hot, new, top, or rising."""
     def body(self, post_relevance, num_posts): # method is not complete, change after to include images after finishing class
+        """Runs sentiment analysis on a specified amount of Reddit posts' body under hot, new, top, or rising."""
+
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
             print(f'Title of the post: {submission.title}')
             print('\n' * 2 + '[]' * 50 + '\n' * 2)
@@ -47,8 +50,9 @@ class SubredditSA:
             print(f'The body of this post has a sentiment of: {postbody_doc._.blob.polarity}')
             print('*' * 100 + '\n' * 2 + '*' * 100 + '\n')
 
-    """Runs sentiment analysis on the top comments of a reddit post, and averages the values to get a total idea of the sentiment."""
     def top_comments(self, post_relevance, num_posts):
+        """Runs sentiment analysis on the top comments of a reddit post, and averages the values to get a total idea of the sentiment."""
+
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
             avg_sentiment = 0
             comments_analyzed = 0
@@ -73,10 +77,13 @@ class SubredditSA:
                     comments_analyzed += 1
                     print('\n' + '*' * 100 + '\n')
 
-            avg_sentiment /= comments_analyzed
-            print('\n' * 2 + '[]' * 50 + '\n' * 2)
-            print(f'The sentiment of the people is: {avg_sentiment}')
-            print('\n' * 2 + '[]' * 50 + '\n' * 2)
+            if comments_analyzed == 0:
+                print('There are no comments to analyze in this Reddit post.')
+            else:
+                avg_sentiment /= comments_analyzed
+                print('\n' * 2 + '[]' * 50 + '\n' * 2)
+                print(f'The sentiment of the people is: {avg_sentiment}')
+                print('\n' * 2 + '[]' * 50 + '\n' * 2)
     
     def sub_comments(self, post_relevance, num_posts, level=2):
         """Runs sentiment analysis on the sub comments of a reddit post, and averages the values to get a total idea of the sentiment."""
