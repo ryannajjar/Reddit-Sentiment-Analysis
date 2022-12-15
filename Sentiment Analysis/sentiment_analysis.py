@@ -80,12 +80,15 @@ class SubredditSA:
     
     def sub_comments(self, post_relevance, num_posts, level=2):
         """Runs sentiment analysis on the sub comments of a reddit post, and averages the values to get a total idea of the sentiment."""
+
+        f = open('comment_replies_data.txt', 'w')
+        
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
             avg_sentiment = 0
             comment_replies_analyzed = 0
 
-            print(f'Title of the post: {submission.title}')
-            print('\n' * 2 + '[]' * 50 + '\n' * 2)
+            f.write(f'Title of the post: {submission.title}\n')
+            f.write('\n' + '[]' * 50 + '\n' * 2)
 
             comment_replies_in_level = []
             for comment in self._only_comments(submission.comments):
@@ -107,33 +110,36 @@ class SubredditSA:
                         break
 
                 comment_replies_in_level += queue
-                    
+     
             # Process comment replies in desired level
             for comment_reply in comment_replies_in_level:
                 if comment_reply.body == '[deleted]':
-                    print(comment_reply.body)
-                    print('UNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS DELETED')
-                    print('\n' + '*' * 100 + '\n')
+                    f.write(comment_reply.body + '\n')
+                    f.write('UNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS DELETED\n')
+                    f.write('\n' + '*' * 100 + '\n')
                 elif comment_reply.body == '[removed]':
-                    print(comment_reply.body)
-                    print('UNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS REMOVED')
-                    print('\n' + '*' * 100 + '\n')
+                    f.write(comment_reply.body + '\n')
+                    f.write('UNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS REMOVED\n')
+                    f.write('\n' + '*' * 100 + '\n')
                 else:
-                    print(comment_reply.body)
+                    f.write(comment_reply.body + '\n')
                     postcommentreply_doc = nlp(comment_reply.body)
                     sentiment_value = postcommentreply_doc._.blob.polarity / 3
-                    print(f'This comment reply has a sentiment of: {sentiment_value}')
+                    f.write(f'\n\nThis comment reply has a sentiment of: {sentiment_value}\n')
                     avg_sentiment += sentiment_value
                     comment_replies_analyzed += 1
-                    print('\n' + '*' * 100 + '\n')
+                    f.write('\n' + '*' * 100 + '\n')
 
             if comment_replies_analyzed == 0:
-                print(f'There are no sub comments in the Reddit post on level {level} to analyze.')
+                f.write(f'There are no sub comments in the Reddit post on level {level} to analyze.\n')
+                f.write('\n' + '[]' * 50 + '\n' * 2)
             else:
                 avg_sentiment /= comment_replies_analyzed
-                print('\n' * 2 + '[]' * 50 + '\n' * 2)
-                print(f'The sentiment of the people is: {avg_sentiment}')
-                print('\n' * 2 + '[]' * 50 + '\n' * 2)
+                f.write('\n' * 2 + '[]' * 50 + '\n' * 2)
+                f.write(f'The sentiment of the people is: {avg_sentiment}\n')
+                f.write('\n' + '[]' * 50 + '\n' * 2)
+            
+        f.close()
     
     def _only_comments(self, comments_obj):
         """Deals with errors relating to MoreComments, to yield only comments"""
