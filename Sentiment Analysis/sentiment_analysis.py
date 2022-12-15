@@ -162,6 +162,7 @@ class SubredditSA:
     
     def _only_comments(self, comments_obj):
         """Deals with errors relating to MoreComments, to yield only comments"""
+
         comments_obj.replace_more()
         for comment in comments_obj:
             if isinstance(comment, MoreComments):
