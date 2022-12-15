@@ -33,10 +33,10 @@ class SubredditSA:
         f = open('title_data.txt', 'w')
 
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
-            f.write(submission.title)
-            f.write('\n' * 2)
+            f.write(submission.title + '\n')
+            f.write('\n')
             posttitle_doc = nlp(submission.title)
-            f.write(f'The title of this post has a sentiment of: {posttitle_doc._.blob.polarity}')
+            f.write(f'The title of this post has a sentiment of: {posttitle_doc._.blob.polarity}\n')
             f.write('*' * 100 + '\n' * 2 + '*' * 100 + '\n')
 
         f.close()
@@ -47,13 +47,14 @@ class SubredditSA:
         f = open('body_data.txt', 'w')
 
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
-            f.write(f'Title of the post: {submission.title}')
-            f.write('\n' * 2 + '[]' * 50 + '\n' * 2)
+            f.write('\n' + '[]' * 50 + '\n' * 2)
+            f.write(f'Title of the post: {submission.title}\n')
+            f.write('\n' + '[]' * 50 + '\n' * 2)
 
-            f.write(submission.selftext)
-            f.write('\n' * 2)
+            f.write(submission.selftext + '\n')
+            f.write('\n')
             postbody_doc = nlp(submission.selftext)
-            f.write(f'The body of this post has a sentiment of: {postbody_doc._.blob.polarity}')
+            f.write(f'The body of this post has a sentiment of: {postbody_doc._.blob.polarity}\n')
             f.write('*' * 100 + '\n' * 2 + '*' * 100 + '\n')
 
         f.close()
@@ -67,33 +68,33 @@ class SubredditSA:
             avg_sentiment = 0
             comments_analyzed = 0
 
-            f.write(f'Title of the post: {submission.title}')
-            f.write('\n' * 2 + '[]' * 50 + '\n' * 2)
+            f.write('\n' + '[]' * 50 + '\n' * 2)
+            f.write(f'Title of the post: {submission.title}\n')
+            f.write('\n' + '[]' * 50 + '\n' * 2)
 
             for top_level_comment in self._only_comments(submission.comments):
                 if top_level_comment.body == '[deleted]':
-                    f.write(top_level_comment.body)
-                    f.write('UNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS DELETED')
+                    f.write(top_level_comment.body + '\n')
+                    f.write('UNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS DELETED\n')
                     f.write('\n' + '*' * 100 + '\n')
                 elif top_level_comment.body == '[removed]':
-                    f.write(top_level_comment.body)
-                    f.write('UNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS REMOVED')
+                    f.write(top_level_comment.body + '\n')
+                    f.write('UNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS REMOVED\n')
                     f.write('\n' + '*' * 100 + '\n')
                 else:
-                    f.write(top_level_comment.body)
+                    f.write(top_level_comment.body + '\n')
                     postcomment_doc = nlp(top_level_comment.body)
-                    f.write(f'This comment has a sentiment of: {postcomment_doc._.blob.polarity}')
+                    f.write(f'\n\nThis comment has a sentiment of: {postcomment_doc._.blob.polarity}\n')
                     avg_sentiment += postcomment_doc._.blob.polarity
                     comments_analyzed += 1
                     f.write('\n' + '*' * 100 + '\n')
 
             if comments_analyzed == 0:
-                f.write('There are no comments to analyze in this Reddit post.')
+                f.write('There are no comments to analyze in this Reddit post.\n')
             else:
                 avg_sentiment /= comments_analyzed
                 f.write('\n' * 2 + '[]' * 50 + '\n' * 2)
-                f.write(f'The sentiment of the people is: {avg_sentiment}')
-                f.write('\n' * 2 + '[]' * 50 + '\n' * 2)
+                f.write(f'The sentiment of the people is: {avg_sentiment}\n')
 
         f.close()
     
@@ -106,6 +107,7 @@ class SubredditSA:
             avg_sentiment = 0
             comment_replies_analyzed = 0
 
+            f.write('\n' + '[]' * 50 + '\n' * 2)
             f.write(f'Title of the post: {submission.title}\n')
             f.write('\n' + '[]' * 50 + '\n' * 2)
 
@@ -151,12 +153,10 @@ class SubredditSA:
 
             if comment_replies_analyzed == 0:
                 f.write(f'There are no sub comments in the Reddit post on level {level} to analyze.\n')
-                f.write('\n' + '[]' * 50 + '\n' * 2)
             else:
                 avg_sentiment /= comment_replies_analyzed
                 f.write('\n' * 2 + '[]' * 50 + '\n' * 2)
                 f.write(f'The sentiment of the people is: {avg_sentiment}\n')
-                f.write('\n' + '[]' * 50 + '\n' * 2)
             
         f.close()
     
