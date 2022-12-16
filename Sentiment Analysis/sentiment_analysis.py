@@ -168,3 +168,7 @@ class SubredditSA:
             if isinstance(comment, MoreComments):
                 continue
             yield comment
+
+
+if __name__ == '__main__':
+    pass
