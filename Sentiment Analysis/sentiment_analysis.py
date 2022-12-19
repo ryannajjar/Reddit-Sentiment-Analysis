@@ -160,6 +160,16 @@ class SubredditSA:
             
         f.close()
     
+    def votes(self, post_relevance, num_posts):
+        """Uses the ratio of upvotes to total votes to calculate the general sentiment."""
+
+        f = open('votes_data.txt', 'w')
+
+        for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
+            f.write('\n' + '[]' * 50 + '\n' * 2)
+            f.write(f'Title of the post: {submission.title}\n')
+            f.write('\n' + '[]' * 50 + '\n' * 2)
+    
     def _only_comments(self, comments_obj):
         """Deals with errors relating to MoreComments, to yield only comments"""
 
