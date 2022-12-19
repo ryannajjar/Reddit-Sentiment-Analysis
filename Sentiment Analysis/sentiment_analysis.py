@@ -169,6 +169,13 @@ class SubredditSA:
             f.write('\n' + '[]' * 50 + '\n' * 2)
             f.write(f'Title of the post: {submission.title}\n')
             f.write('\n' + '[]' * 50 + '\n' * 2)
+
+            f.write(f'{submission.upvote_ratio * 100}% of the votes on this post are upvotes.\n')
+            f.write('\n')
+            f.write(f'Based on upvote ratio, the sentiment of the people is: {2 * submission.upvote_ratio - 1}\n')
+            f.write('*' * 100 + '\n' * 2 + '*' * 100 + '\n')
+
+        f.close()
     
     def _only_comments(self, comments_obj):
         """Deals with errors relating to MoreComments, to yield only comments"""
