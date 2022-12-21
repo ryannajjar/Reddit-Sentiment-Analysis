@@ -111,7 +111,7 @@ class SubredditSA:
             f.write(f'Title of the post: {submission.title}\n')
             f.write('\n' + '[]' * 50 + '\n' * 2)
 
-            comment_replies_in_level = []
+            parents = []
             for comment in self._only_comments(submission.comments):
                 queue = deque([comment])
                 visited = {comment}
@@ -127,29 +127,34 @@ class SubredditSA:
                                 queue.append(comment_reply)
 
                     depth_counter += 1
-                    if depth_counter == level:
+
+                    if depth_counter == level - 1:
                         break
 
-                comment_replies_in_level += queue
-     
-            # Process comment replies in desired level
-            for comment_reply in comment_replies_in_level:
-                if comment_reply.body == '[deleted]':
-                    f.write(comment_reply.body + '\n')
-                    f.write('UNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS DELETED\n')
-                    f.write('\n' + '*' * 100 + '\n')
-                elif comment_reply.body == '[removed]':
-                    f.write(comment_reply.body + '\n')
-                    f.write('UNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS REMOVED\n')
-                    f.write('\n' + '*' * 100 + '\n')
-                else:
-                    f.write(comment_reply.body + '\n')
-                    postcommentreply_doc = nlp(comment_reply.body)
-                    sentiment_value = postcommentreply_doc._.blob.polarity / 3
-                    f.write(f'\n\nThis comment reply has a sentiment of: {sentiment_value}\n')
-                    avg_sentiment += sentiment_value
-                    comment_replies_analyzed += 1
-                    f.write('\n' + '*' * 100 + '\n')
+                parents += queue
+
+            for parent_comment in parents:
+                f.write('\n')
+                f.write(parent_comment.body + '\n')
+                f.write('\n')
+                for comment_reply in self._only_comments(parent_comment.replies):
+                    if comment_reply.body == '[deleted]':
+                        f.write('\t' + comment_reply.body.replace('\n', '\n\t') + '\n')
+                        f.write('\tUNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS DELETED\n')
+                        f.write('\n\t' + '*' * 100 + '\n')
+                    elif comment_reply.body == '[removed]':
+                        f.write('\t' + comment_reply.body.replace('\n', '\n\t') + '\n')
+                        f.write('\tUNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS REMOVED\n')
+                        f.write('\n\t' + '*' * 100 + '\n')
+                    else:
+                        f.write('\t' + comment_reply.body.replace('\n', '\n\t') + '\n')
+                        postcommentreply_doc = nlp(comment_reply.body)
+                        sentiment_value = postcommentreply_doc._.blob.polarity / 3
+                        f.write(f'\n\n\tThis comment reply has a sentiment of: {sentiment_value}\n')
+                        avg_sentiment += sentiment_value
+                        comment_replies_analyzed += 1
+                        f.write('\n\t' + '*' * 100 + '\n')
+                f.write('*' * 100 + '\n')
 
             if comment_replies_analyzed == 0:
                 f.write(f'There are no sub comments in the Reddit post on level {level} to analyze.\n')
@@ -205,4 +210,5 @@ class SubredditSA:
 
 
 if __name__ == '__main__':
-    pass
+    test = SubredditSA('chess')
+    test.sub_comments('hot', 2, 3)
