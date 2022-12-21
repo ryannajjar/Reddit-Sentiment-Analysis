@@ -27,4 +27,4 @@ There is a `SubredditSA` class that has six methods:
 
 5. `votes()`: The `votes` method compares the ratio of upvotes to downvotes on a specified number of Reddit posts within a subreddit, and outputs the sentiment values of the posts based on that ratio.
 
-6. `_multi_analysis()` *(work in progress)*: The `_multi_analysis` semi-private method combines two or more of the previously mentioned methods to calculate a total sentiment value that is more accurate.
+6. `multi_analysis()` *(work in progress)*: The `multi_analysis` method combines two or more of the previously mentioned methods to calculate a total sentiment value that is more accurate.
