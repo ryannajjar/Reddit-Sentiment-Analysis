@@ -170,6 +170,23 @@ class SubredditSA:
             f.write(f'Title of the post: {submission.title}\n')
             f.write('\n' + '[]' * 50 + '\n' * 2)
 
+            if post_relevance == 'new':
+                if submission.score == 0 and submission.upvote_ratio == 0:
+                    f.write(f'{submission.upvote_ratio * 100}% of the votes on this post are upvotes.\n')
+                    f.write('\n')
+                    f.write('Based on upvote ratio, the sentiment of the people is: 0.0\n')
+                    f.write('*' * 100 + '\n' * 2 + '*' * 100 + '\n')
+                elif 0 <= submission.score < 100 or submission.socre < 0:
+                    f.write(f'{submission.upvote_ratio * 100}% of the votes on this post are upvotes.\n')
+                    f.write('\n')
+                    f.write(f'Based on upvote ratio, the sentiment of the people is: {(2 * submission.upvote_ratio - 1) / 3}\n')
+                    f.write('*' * 100 + '\n' * 2 + '*' * 100 + '\n')
+                elif submission.score >= 100:
+                    f.write(f'{submission.upvote_ratio * 100}% of the votes on this post are upvotes.\n')
+                    f.write('\n')
+                    f.write(f'Based on upvote ratio, the sentiment of the people is: {2 * submission.upvote_ratio - 1}\n')
+                    f.write('*' * 100 + '\n' * 2 + '*' * 100 + '\n')
+
             f.write(f'{submission.upvote_ratio * 100}% of the votes on this post are upvotes.\n')
             f.write('\n')
             f.write(f'Based on upvote ratio, the sentiment of the people is: {2 * submission.upvote_ratio - 1}\n')
