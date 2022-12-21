@@ -210,5 +210,4 @@ class SubredditSA:
 
 
 if __name__ == '__main__':
-    test = SubredditSA('chess')
-    test.sub_comments('hot', 2, 3)
+    pass
