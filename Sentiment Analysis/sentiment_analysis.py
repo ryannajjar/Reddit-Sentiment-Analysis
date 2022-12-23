@@ -66,12 +66,30 @@ class SubredditSA:
 
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
             if submission.selftext == '':
-                body_data.append(('THE POST DOES NOT HAVE ANY TEXT TO RUN SENTIMENT ANALYSIS ON', ''))
+                body_data.append(('THE POST DOES NOT HAVE ANY TEXT TO RUN SENTIMENT ANALYSIS ON', '', submission.title))
             else:
                 postbody_doc = nlp(submission.selftext)
-                body_data.append((submission.selftext, postbody_doc._.blob.polarity))
+                body_data.append((submission.selftext, postbody_doc._.blob.polarity, submission.title))
         
         return body_data
+
+    def display_body_results(self, post_relevance, num_posts=1):
+        """Displays the data aquired from running the body() method."""
+
+        f = open('body_data.txt', 'w')
+        body_data = self.body(post_relevance, num_posts)
+
+        for data in body_data:
+            f.write('\n')
+            f.write(fm.display_title(data[2]))
+            f.write(fm.big_separator_1())
+
+            f.write(data[0] + '\n')
+            f.write('\n')
+            f.write(f'The body of this post has a sentiment of: {data[1]}\n')
+            f.write(fm.mini_separator_1())
+
+        f.close()
 
     def top_comments(self, post_relevance, num_posts=1):
         """Runs sentiment analysis on the top comments of a reddit post, and averages the values to get a total idea of the sentiment."""
