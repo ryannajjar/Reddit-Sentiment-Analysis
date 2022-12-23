@@ -45,6 +45,20 @@ class SubredditSA:
               
         return title_data
 
+    def display_title_results(self, post_relevance, num_posts=1):
+        """Displays the data aquired from running the title() method."""
+
+        f = open('title_data.txt', 'w')
+        title_data = self.title(post_relevance, num_posts)
+
+        for data in title_data:
+            f.write(data[0] + '\n')
+            f.write('\n')
+            f.write(f'The title of this post has a sentiment of: {data[1]}\n')
+            f.write(fm.mini_separator_1())
+            
+        f.close()
+
     def body(self, post_relevance, num_posts=1): # method is not complete, change after to include images after finishing class
         """Runs sentiment analysis on a specified amount of Reddit posts' body under hot, new, top, or rising."""
 
