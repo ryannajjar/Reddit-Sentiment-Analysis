@@ -34,7 +34,7 @@ class SubredditSA:
 
         self.subreddit = subreddit
     
-    def title(self, post_relevance, num_posts):
+    def title(self, post_relevance, num_posts=1):
         """Runs sentiment analysis on a specified amount of Reddit posts' titles under hot, new, top, or rising."""
 
         f = open('title_data.txt', 'w')
@@ -48,7 +48,7 @@ class SubredditSA:
 
         f.close()
 
-    def body(self, post_relevance, num_posts): # method is not complete, change after to include images after finishing class
+    def body(self, post_relevance, num_posts=1): # method is not complete, change after to include images after finishing class
         """Runs sentiment analysis on a specified amount of Reddit posts' body under hot, new, top, or rising."""
 
         f = open('body_data.txt', 'w')
@@ -71,7 +71,7 @@ class SubredditSA:
 
         f.close()
 
-    def top_comments(self, post_relevance, num_posts):
+    def top_comments(self, post_relevance, num_posts=1):
         """Runs sentiment analysis on the top comments of a reddit post, and averages the values to get a total idea of the sentiment."""
 
         f = open('comment_data.txt', 'w')
@@ -110,7 +110,7 @@ class SubredditSA:
 
         f.close()
     
-    def sub_comments(self, post_relevance, num_posts, level=2):
+    def sub_comments(self, post_relevance, num_posts=1, level=2):
         """Runs sentiment analysis on the sub comments of a reddit post, and averages the values to get a total idea of the sentiment."""
 
         f = open('comment_replies_data.txt', 'w')
@@ -177,7 +177,7 @@ class SubredditSA:
             
         f.close()
     
-    def votes(self, post_relevance, num_posts):
+    def votes(self, post_relevance, num_posts=1):
         """Uses the ratio of upvotes to total votes to calculate the general sentiment."""
 
         f = open('votes_data.txt', 'w')
