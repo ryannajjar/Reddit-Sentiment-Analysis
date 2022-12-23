@@ -54,15 +54,20 @@ class SubredditSA:
         f = open('body_data.txt', 'w')
 
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
-            f.write(fm.big_separator_1())
+            f.write('\n')
             f.write(fm.display_title(submission.title))
             f.write(fm.big_separator_1())
 
-            f.write(submission.selftext + '\n')
-            f.write('\n')
-            postbody_doc = nlp(submission.selftext)
-            f.write(f'The body of this post has a sentiment of: {postbody_doc._.blob.polarity}\n')
-            f.write(fm.mini_separator_1())
+            if submission.selftext == '':
+                f.write('THE POST DOES NOT HAVE ANY TEXT TO RUN SENTIMENT ANALYSIS ON\n')
+                f.write('\n')
+                f.write(fm.mini_separator_1())
+            else:
+                f.write(submission.selftext + '\n')
+                f.write('\n')
+                postbody_doc = nlp(submission.selftext)
+                f.write(f'The body of this post has a sentiment of: {postbody_doc._.blob.polarity}\n')
+                f.write(fm.mini_separator_1())
 
         f.close()
 
