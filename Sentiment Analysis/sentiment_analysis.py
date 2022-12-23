@@ -61,26 +61,17 @@ class SubredditSA:
 
     def body(self, post_relevance, num_posts=1): # method is not complete, change after to include images after finishing class
         """Runs sentiment analysis on a specified amount of Reddit posts' body under hot, new, top, or rising."""
-
-        f = open('body_data.txt', 'w')
+        
+        body_data = []
 
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
-            f.write('\n')
-            f.write(fm.display_title(submission.title))
-            f.write(fm.big_separator_1())
-
             if submission.selftext == '':
-                f.write('THE POST DOES NOT HAVE ANY TEXT TO RUN SENTIMENT ANALYSIS ON\n')
-                f.write('\n')
-                f.write(fm.mini_separator_1())
+                body_data.append(('THE POST DOES NOT HAVE ANY TEXT TO RUN SENTIMENT ANALYSIS ON', ''))
             else:
-                f.write(submission.selftext + '\n')
-                f.write('\n')
                 postbody_doc = nlp(submission.selftext)
-                f.write(f'The body of this post has a sentiment of: {postbody_doc._.blob.polarity}\n')
-                f.write(fm.mini_separator_1())
-
-        f.close()
+                body_data.append((submission.selftext, postbody_doc._.blob.polarity))
+        
+        return body_data
 
     def top_comments(self, post_relevance, num_posts=1):
         """Runs sentiment analysis on the top comments of a reddit post, and averages the values to get a total idea of the sentiment."""
