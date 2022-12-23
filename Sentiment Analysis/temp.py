@@ -37,13 +37,16 @@ class SubredditSA:
     def title(self, post_relevance, num_posts=1):
         """Runs sentiment analysis on a specified amount of Reddit posts' titles under hot, new, top, or rising."""
 
-        title_data = []
+        f = open('title_data.txt', 'w')
 
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
+            f.write(submission.title + '\n')
+            f.write('\n')
             posttitle_doc = nlp(submission.title)
-            title_data.append((submission.title, posttitle_doc._.blob.polarity))
-              
-        return title_data
+            f.write(f'The title of this post has a sentiment of: {posttitle_doc._.blob.polarity}\n')
+            f.write(fm.mini_separator_1())
+
+        f.close()
 
     def body(self, post_relevance, num_posts=1): # method is not complete, change after to include images after finishing class
         """Runs sentiment analysis on a specified amount of Reddit posts' body under hot, new, top, or rising."""
