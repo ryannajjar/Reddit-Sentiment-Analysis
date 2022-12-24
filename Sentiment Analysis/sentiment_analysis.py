@@ -40,11 +40,17 @@ class SubredditSA:
         title_data = []
 
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
+            title_list = []
+
             posttitle_doc = nlp(submission.title)
-            title_data.append((
+            title_list.append((
                 submission.title, 
                 posttitle_doc._.blob.polarity
                 ))
+
+            title_data.append({
+                'titles': title_list
+            })
               
         return title_data
 
@@ -84,7 +90,7 @@ class SubredditSA:
 
             body_data.append({
                 'title': submission.title,
-                'body': body_list,
+                'content': body_list,
             })
         
         return body_data
