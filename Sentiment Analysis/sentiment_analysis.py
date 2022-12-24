@@ -61,10 +61,11 @@ class SubredditSA:
         title_data = self.title(post_relevance, num_posts)
 
         for data in title_data:
-            f.write(data[0] + '\n')
-            f.write('\n')
-            f.write(f'The title of this post has a sentiment of: {data[1]}\n')
-            f.write(fm.mini_separator_1())
+            for title in data['titles']:
+                f.write(title[0] + '\n')
+                f.write('\n')
+                f.write(f'The title of this post has a sentiment of: {title[1]}\n')
+                f.write(fm.mini_separator_1())
             
         f.close()
 
