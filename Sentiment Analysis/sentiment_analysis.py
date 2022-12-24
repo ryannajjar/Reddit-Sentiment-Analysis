@@ -144,6 +144,39 @@ class SubredditSA:
                 'comments': comment_list,
                 'average_sentiment': avg_sentiment
             })
+        
+        return top_comments_data
+
+    def display_top_comments_results(self, post_relevance, num_posts=1):
+        """Displays the data aquired from running the top_comments() method."""
+
+        f = open('comment_data.txt', 'w')
+        top_comments_data = self.top_comments(post_relevance, num_posts)
+
+        for data in top_comments_data:
+            f.write(fm.big_separator_1())
+            f.write(fm.display_title(data['title']))
+            f.write(fm.big_separator_1())
+
+            for comment in data['comments']:
+                if comment[0] == '[deleted]':
+                    f.write(comment[0] + '\n')
+                    f.write(comment[1] + '\n')
+                    f.write(fm.mini_separator_2())
+                elif comment[0] == '[removed]':
+                    f.write(comment[0] + '\n')
+                    f.write(comment[1] + '\n')
+                    f.write(fm.mini_separator_2())
+                else:
+                    f.write(comment[0] + '\n')
+                    f.write(f'\n\nThis comment has a sentiment of: {comment[1]}\n')
+                    f.write(fm.mini_separator_2())
+                
+            if data['average_sentiment'] == '':
+                f.write(comment[0])
+            else:
+                f.write(fm.big_separator_2())
+                f.write(fm.display_average_sentiment(data['average_sentiment']))
 
     def sub_comments(self, post_relevance, num_posts=1, level=2):
         """Runs sentiment analysis on the sub comments of a reddit post, and averages the values to get a total idea of the sentiment."""
@@ -260,4 +293,4 @@ class SubredditSA:
 
 
 if __name__ == '__main__':
-    pass
+    SubredditSA('chess').display_top_comments_results('hot', 10)
