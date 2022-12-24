@@ -43,7 +43,8 @@ class SubredditSA:
             posttitle_doc = nlp(submission.title)
             title_data.append((
                 submission.title, 
-                posttitle_doc._.blob.polarity))
+                posttitle_doc._.blob.polarity
+                ))
               
         return title_data
 
@@ -71,13 +72,15 @@ class SubredditSA:
                 body_data.append((
                     'THE POST DOES NOT HAVE ANY TEXT TO RUN SENTIMENT ANALYSIS ON', 
                     '', 
-                    submission.title))
+                    submission.title
+                    ))
             else:
                 postbody_doc = nlp(submission.selftext)
                 body_data.append((
                     submission.selftext, 
                     postbody_doc._.blob.polarity, 
-                    submission.title))
+                    submission.title
+                    ))
         
         return body_data
 
@@ -92,10 +95,15 @@ class SubredditSA:
             f.write(fm.display_title(data[2]))
             f.write(fm.big_separator_1())
 
-            f.write(data[0] + '\n')
-            f.write('\n')
-            f.write(f'The body of this post has a sentiment of: {data[1]}\n')
-            f.write(fm.mini_separator_1())
+            if data[1] == '':
+                f.write(data[0] + '\n')
+                f.write('\n')
+                f.write(fm.mini_separator_1())
+            else:
+                f.write(data[0] + '\n')
+                f.write('\n')
+                f.write(f'The body of this post has a sentiment of: {data[1]}\n')
+                f.write(fm.mini_separator_1())
 
         f.close()
 
@@ -105,40 +113,37 @@ class SubredditSA:
         top_comments_data = []
 
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
-
             avg_sentiment = 0
-            comments_analyzed = 0
+            comment_list = []
 
             for top_level_comment in self._only_comments(submission.comments):  
-                if top_level_comment.body == '[deleted]':
-                    top_comments_data.append((
-                        top_level_comment.body, 
-                        'UNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS DELETED', 
-                        submission.title))
-                elif top_level_comment.body == '[removed]':
-                    top_comments_data.append((
-                        top_level_comment.body, 
-                        'UNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS REMOVED', 
-                        submission.title))
+                if top_level_comment.body in ['[deleted]', '[removed]']:
+                    sentiment = f'UNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS {top_level_comment.body[1:-1].upper()}'
                 else:
                     postcomment_doc = nlp(top_level_comment.body)
-                    avg_sentiment += postcomment_doc._.blob.polarity
-                    comments_analyzed += 1
-                    top_comments_data.append((
-                        top_level_comment.body, 
-                        postcomment_doc._.blob.polarity, 
-                        submission.title))
-            
-            if comments_analyzed == 0:
-                top_comments_data.append((
-                    'There are no comments to analyze in this Reddit post.', 
-                    '', 
-                    submission.title))
-            else:
-                avg_sentiment /= comments_analyzed
-                top_comments_data.append(avg_sentiment)
+                    sentiment = postcomment_doc._.blob.polarity
+                    avg_sentiment += sentiment
+                
+                comment_list.append((
+                    top_level_comment.body,
+                    sentiment
+                ))
 
-        return top_comments_data
+            if len(comment_list) == 0:
+                comment_list.append((
+                    'There are no comments to analyze in this Reddit post.',
+                    ''
+                ))
+
+                avg_sentiment = ''
+            else:
+                avg_sentiment /= len(comment_list)
+
+            top_comments_data.append({
+                'title': submission.title,
+                'comments': comment_list,
+                'average_sentiment': avg_sentiment
+            })
 
     def sub_comments(self, post_relevance, num_posts=1, level=2):
         """Runs sentiment analysis on the sub comments of a reddit post, and averages the values to get a total idea of the sentiment."""
