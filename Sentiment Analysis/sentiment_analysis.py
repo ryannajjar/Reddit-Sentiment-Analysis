@@ -97,18 +97,19 @@ class SubredditSA:
 
         for data in body_data:
             f.write('\n')
-            f.write(fm.display_title(data[2]))
+            f.write(fm.display_title(data['title']))
             f.write(fm.big_separator_1())
 
-            if data[1] == '':
-                f.write(data[0] + '\n')
-                f.write('\n')
-                f.write(fm.mini_separator_1())
-            else:
-                f.write(data[0] + '\n')
-                f.write('\n')
-                f.write(f'The body of this post has a sentiment of: {data[1]}\n')
-                f.write(fm.mini_separator_1())
+            for body in data['body']:
+                if body[1] == '':
+                    f.write(body[0] + '\n')
+                    f.write('\n')
+                    f.write(fm.mini_separator_1())
+                else:
+                    f.write(body[0] + '\n')
+                    f.write('\n')
+                    f.write(f'The body of this post has a sentiment of: {body[1]}\n')
+                    f.write(fm.mini_separator_1())
 
         f.close()
 
@@ -182,6 +183,8 @@ class SubredditSA:
             else:
                 f.write(fm.big_separator_2())
                 f.write(fm.display_average_sentiment(data['average_sentiment']))
+        
+        f.close()
 
     def sub_comments(self, post_relevance, num_posts=1, level=2):
         """Runs sentiment analysis on the sub comments of a reddit post, and averages the values to get a total idea of the sentiment."""
@@ -298,4 +301,4 @@ class SubredditSA:
 
 
 if __name__ == '__main__':
-    SubredditSA('chess').display_top_comments_results('hot', 10)
+    pass
