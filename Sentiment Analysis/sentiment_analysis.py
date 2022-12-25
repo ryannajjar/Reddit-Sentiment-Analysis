@@ -123,11 +123,17 @@ class SubredditSA:
             f.write(fm.big_separator_1())
 
             for body in data['body']:
-                if body[1] == '':
+                if body[1] == '' and body[2] == '':
                     f.write(body[0] + '\n')
                     f.write('\n')
                     f.write(fm.mini_separator_1())
-                else:
+                elif body[1] == '':
+                    f.write(body[0] + '\n')
+                    f.write('\n')
+                    f.write(fm.mini_separator_2())
+                    f.write(f'Url that the Reddit post links to: {body[2]}')
+                    f.write(fm.mini_separator_1())
+                elif body[1]:
                     f.write(body[0] + '\n')
                     f.write('\n')
                     f.write(f'The body of this post has a sentiment of: {body[1]}\n')
