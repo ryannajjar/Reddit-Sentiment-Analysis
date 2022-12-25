@@ -77,16 +77,31 @@ class SubredditSA:
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
             body_list = []
 
-            if submission.selftext == '':
+            if submission.selftext == '' and submission.is_self is False:
+                body_list.append((
+                    'THE POST DOES NOT HAVE ANY TEXT TO RUN SENTIMENT ANALYSIS ON',
+                    '',
+                    submission.url
+                ))
+            elif submission.selftext == '':
                 body_list.append((
                     'THE POST DOES NOT HAVE ANY TEXT TO RUN SENTIMENT ANALYSIS ON', 
+                    '',
                     ''
                     ))
-            else:
+            elif submission.selftext and submission.is_self is False:
+                postbody_doc = nlp(submission.selftext)
+                body_list.append((
+                    submission.selftext,
+                    postbody_doc._.blob.polarity,
+                    submission.url
+                ))
+            elif submission.selftext:
                 postbody_doc = nlp(submission.selftext)
                 body_list.append((
                     submission.selftext, 
-                    postbody_doc._.blob.polarity
+                    postbody_doc._.blob.polarity,
+                    ''
                     ))
 
             body_data.append({
