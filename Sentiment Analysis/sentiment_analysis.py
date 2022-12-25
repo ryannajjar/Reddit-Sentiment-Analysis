@@ -255,6 +255,7 @@ class SubredditSA:
                         avg_sentiment += sentiment
 
                     replies_list.append((
+                        parent_comment.body,
                         comment_reply.body,
                         sentiment
                     ))
@@ -274,7 +275,7 @@ class SubredditSA:
                 'replies': replies_list,
                 'average_sentiment': avg_sentiment
             })
-        
+
         return sub_comments_data
 
     def votes(self, post_relevance, num_posts=1):
