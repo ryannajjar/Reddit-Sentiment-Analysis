@@ -220,9 +220,6 @@ class SubredditSA:
         sub_comments_data = []
         
         for submission in eval(f'reddit.subreddit("{self.subreddit}").{post_relevance}(limit={num_posts})'):
-            avg_sentiment = 0
-            replies_list = []
-
             parents = []
             for comment in self._only_comments(submission.comments):
                 queue = deque([comment])
@@ -245,7 +242,13 @@ class SubredditSA:
 
                 parents += queue
 
+            avg_sentiment = 0
+            comment_replies_analyzed = 0
+            parents_list = []
+
             for parent_comment in parents:
+                replies_list = []
+
                 for comment_reply in self._only_comments(parent_comment.replies):
                     if comment_reply.body in ['[deleted]', '[removed]']:
                         sentiment = f'UNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS {comment_reply.body[1:-1].upper()}'
@@ -254,29 +257,73 @@ class SubredditSA:
                         sentiment = postcommentreply_doc._.blob.polarity / level
                         avg_sentiment += sentiment
 
+                    comment_replies_analyzed += 1
+
                     replies_list.append((
-                        parent_comment.body,
                         comment_reply.body,
                         sentiment
                     ))
 
-            if len(replies_list) == 0:
-                replies_list.append((
-                    f'There are no sub comments in the Reddit post on level {level} to analyze.',
-                    ''
-                ))
+                parents_list.append({
+                    'parent_content': parent_comment.body,
+                    'replies': replies_list
+                })
 
+            if comment_replies_analyzed == 0:
                 avg_sentiment = ''
             else:
-                avg_sentiment /= len(replies_list)
+                avg_sentiment /= comment_replies_analyzed
                 
             sub_comments_data.append({
                 'title': submission.title,
-                'replies': replies_list,
+                'parents': parents_list,
                 'average_sentiment': avg_sentiment
             })
 
         return sub_comments_data
+    
+    def display_sub_comments_results(self, post_relevance, num_posts=1, level=2):
+        """Displays the data aquired from running the sub_comments() method."""
+
+        f = open('comment_replies_data.txt', 'w')
+        sub_comments_data = self.sub_comments(post_relevance, num_posts, level)
+
+        for data in sub_comments_data:
+            f.write(fm.big_separator_1())
+            f.write(fm.display_title(data['title']))
+            f.write(fm.big_separator_1())
+
+            parents_counter = 0
+
+            for parent in data['parents']:
+                f.write('' if parents_counter == 0 else '\n')
+                f.write(parent['parent_content'] + '\n')
+                f.write('\n' if parent['replies'] else '')
+
+                parents_counter += 1
+
+                for reply in parent['replies']:
+                    if reply[0] == '[deleted]':
+                        f.write(fm.indent(reply[0]))
+                        f.write('\tUNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS DELETED\n')
+                        f.write(fm.mini_separator_2(True))
+                    elif reply[0] == '[removed]':
+                        f.write(fm.indent(reply[0]))
+                        f.write('\tUNABLE TO RUN SENTIMENT ANALYSIS, COMMENT WAS REMOVED\n')
+                        f.write(fm.mini_separator_2(True))
+                    else:
+                        f.write(fm.indent(reply[0]))
+                        f.write(f'\n\n\tThis comment reply has a sentiment of: {reply[1]}\n')
+                        f.write(fm.mini_separator_2(True))
+                f.write('\n' + fm.mini_separator_3())
+
+            if data['average_sentiment'] == '':
+                f.write(f'There are no sub comments in the Reddit post on level {level} to analyze.\n')
+            else:
+                f.write(fm.big_separator_2())
+                f.write(fm.display_average_sentiment(data['average_sentiment']))
+
+        f.close()
 
     def votes(self, post_relevance, num_posts=1):
         """Uses the ratio of upvotes to total votes to calculate the general sentiment."""
