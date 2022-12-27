@@ -339,28 +339,50 @@ class SubredditSA:
                         submission.upvote_ratio * 100,
                         0.0
                     ))
-                elif 0 <= submission.score < 100 or submission.socre < 0:
+
+                elif 0 <= submission.score < 100 or submission.score < 0:
                     votes.append((
                         submission.upvote_ratio * 100,
-                        self._upvote_ratio_to_sentiment_value((submission.upvote_ration / 3))
+                        self._upvote_ratio_to_sentiment_value(submission.upvote_ratio) / 3
                     ))
+
                 elif submission.score >= 100:
                     votes.append((
-                        submission.upvote_ration * 100,
+                        submission.upvote_ratio * 100,
                         self._upvote_ratio_to_sentiment_value(submission.upvote_ratio)
                     ))
 
-            votes.append((
-                submission.upvote_ratio * 100,
-                self._upvote_ratio_to_sentiment_value(submission.upvote_ratio)
-            ))
-        
+            else:
+                votes.append((
+                    submission.upvote_ratio * 100,
+                    self._upvote_ratio_to_sentiment_value(submission.upvote_ratio)
+                ))
+
             votes_data.append({
                 'title': submission.title,
                 'votes': votes
             })
         
         return votes_data
+
+    def display_votes_results(self, post_relevance, num_posts=1):
+        """Displays the data aquired from running the votes() method."""
+
+        f = open('votes_data.txt', 'w')
+        votes_data = self.votes(post_relevance, num_posts)
+
+        for data in votes_data:
+            f.write(fm.big_separator_1())
+            f.write(fm.display_title(data['title']))
+            f.write(fm.big_separator_1())
+
+            for vote in data['votes']:
+                f.write(fm.display_upvote_percentage(vote[0]))
+                f.write('\n')
+                f.write(fm.display_upvote_ratio_sentiment(vote[1]))
+                f.write(fm.mini_separator_1())
+
+        f.close()
 
     def _only_comments(self, comments_obj):
         """Deals with errors relating to MoreComments, to yield only comments"""
