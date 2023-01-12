@@ -384,6 +384,37 @@ class SubredditSA:
 
         f.close()
 
+    def multi_analysis(self, post_relevance, num_posts=1, level=2, title=False, body=False, top_comments=False, sub_comments=False, votes=False):
+        """Uses two or more of these methods: title(), body(), top_comments(), sub_comments(), votes() to calculate a more accurate sentiment."""
+
+        if sum([title, body, top_comments, sub_comments, votes]) < 2:
+            msg = 'At least two of the parameters must be set to True.'
+            raise ValueError(msg)
+        
+        if level < 2 or level is True:
+            msg = 'level parameter must be an integer 2 or larger.'
+            raise ValueError(msg)
+        
+        method_dict_without_level = {
+            title: self.title,
+            body: self.body,
+            top_comments: self.top_comments,
+            sub_comments: self.sub_comments,
+            votes: self.votes
+        }
+
+        true_methods = {}
+        for parameter, method in method_dict_without_level:
+            if parameter is True and method == self.top_comments or self.sub_comments:
+                true_methods[parameter] = method
+            elif parameter is True:
+                true_methods[parameter] = method
+        
+        # for method in true_methods:
+        #     if 
+        
+        return False
+
     def _only_comments(self, comments_obj):
         """Deals with errors relating to MoreComments, to yield only comments"""
 
@@ -398,4 +429,4 @@ class SubredditSA:
 
 
 if __name__ == '__main__':
-    pass
+    print(SubredditSA('chess').multi_analysis('hot', 1, 2, False, False, True, True))
