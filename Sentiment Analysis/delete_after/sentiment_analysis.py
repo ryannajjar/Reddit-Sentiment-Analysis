@@ -2,7 +2,7 @@
 from collections import deque
 
 # In-project
-import display_dat.methods.helper_methods.formatting as fm
+import display_data.methods.helper_methods.formatting as fm
 
 # Third-party
 import praw

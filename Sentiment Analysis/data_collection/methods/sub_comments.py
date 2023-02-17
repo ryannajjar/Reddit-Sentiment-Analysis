@@ -2,7 +2,6 @@
 from collections import deque
 
 # In-project
-from data_collection.config import *
 from data_collection.methods.helper_methods._only_comments import _only_comments
 
 

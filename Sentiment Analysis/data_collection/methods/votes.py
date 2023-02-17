@@ -1,5 +1,4 @@
 # In-project
-from data_collection.config import *
 from data_collection.methods.helper_methods._upvote_ratio_to_sentiment_value import _upvote_ratio_to_sentiment_value
 
 
