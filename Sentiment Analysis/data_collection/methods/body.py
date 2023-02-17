@@ -1,7 +1,3 @@
-# In-project
-from data_collection.config import *
-
-
 def body(subreddit, post_relevance, num_posts=1): # function is not complete, change after to include images after finishing class
     """Runs sentiment analysis on a specified amount of Reddit posts' body under hot, new, top, or rising."""
     

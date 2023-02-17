@@ -1,5 +1,5 @@
 # In-project
-from data_collection.creds import *
+from creds import *
 
 # Third-party
 import praw
