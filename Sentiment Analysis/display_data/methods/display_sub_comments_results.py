@@ -2,11 +2,11 @@
 import display_data.methods.helper_methods.formatting as fm
 
 
-def display_sub_comments_results(subreddit, post_relevance, num_posts=1, level=2):
+def display_sub_comments_results(collected_data):
     """Displays the data aquired from running the sub_comments() method."""
 
     f = open('comment_replies_data.txt', 'w')
-    sub_comments_data = sub_comments(subreddit, post_relevance, num_posts, level)
+    sub_comments_data = collected_data
 
     for data in sub_comments_data:
         f.write(fm.big_separator_1())
@@ -38,7 +38,7 @@ def display_sub_comments_results(subreddit, post_relevance, num_posts=1, level=2
             f.write('\n' + fm.mini_separator_3())
 
         if data['average_sentiment'] == '':
-            f.write(f'There are no sub comments in the Reddit post on level {level} to analyze.\n')
+            f.write(f'There are no sub comments in the Reddit post on level {data["level"]} to analyze.\n')
         else:
             f.write(fm.big_separator_2())
             f.write(fm.display_average_sentiment(data['average_sentiment']))

@@ -1,7 +1,15 @@
 # Standard
 from collections import deque
 
+# Third-party
+import praw
+
+import spacy
+from spacytextblob.spacytextblob import SpacyTextBlob
+
 # In-project
+from config import nlp, reddit
+
 from data_collection.methods.helper_methods._only_comments import _only_comments
 
 
@@ -67,6 +75,7 @@ def sub_comments(subreddit, post_relevance, num_posts=1, level=2):
             
         sub_comments_data.append({
             'title': submission.title,
+            'level': level,
             'parents': parents_list,
             'average_sentiment': avg_sentiment
         })

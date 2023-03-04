@@ -2,11 +2,11 @@
 import display_data.methods.helper_methods.formatting as fm
 
 
-def display_votes_results(self, post_relevance, num_posts=1):
+def display_votes_results(collected_data):
     """Displays the data aquired from running the votes() method."""
 
     f = open('votes_data.txt', 'w')
-    votes_data = self.votes(post_relevance, num_posts)
+    votes_data = collected_data
 
     for data in votes_data:
         f.write(fm.big_separator_1())

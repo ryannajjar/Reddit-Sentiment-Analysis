@@ -2,11 +2,11 @@
 import display_data.methods.helper_methods.formatting as fm
 
 
-def display_title_results(subreddit, post_relevance, num_posts=1):
+def display_title_results(collected_data):
     """Displays the data aquired from running the title() method."""
 
     f = open('title_data.txt', 'w')
-    title_data = title(subreddit, post_relevance, num_posts)
+    title_data = collected_data
 
     for data in title_data:
         for title in data['titles']:

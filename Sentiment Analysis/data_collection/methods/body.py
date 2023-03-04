@@ -1,3 +1,13 @@
+# Third-party
+import praw
+
+import spacy
+from spacytextblob.spacytextblob import SpacyTextBlob
+
+# In-project
+from config import nlp, reddit
+
+
 def body(subreddit, post_relevance, num_posts=1): # function is not complete, change after to include images after finishing class
     """Runs sentiment analysis on a specified amount of Reddit posts' body under hot, new, top, or rising."""
     
@@ -37,6 +47,5 @@ def body(subreddit, post_relevance, num_posts=1): # function is not complete, ch
             'title': submission.title,
             'content': body_list,
         })
-    
+
     return body_data
-    
