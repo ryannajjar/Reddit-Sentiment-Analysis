@@ -1,4 +1,12 @@
+# Third-party
+import praw
+
+import spacy
+from spacytextblob.spacytextblob import SpacyTextBlob
+
 # In-project
+from config import nlp, reddit
+
 from data_collection.methods.helper_methods._upvote_ratio_to_sentiment_value import _upvote_ratio_to_sentiment_value
 
 

@@ -2,11 +2,11 @@
 import display_data.methods.helper_methods.formatting as fm
 
 
-def display_top_comments_results(self, post_relevance, num_posts=1):
+def display_top_comments_results(collected_data):
     """Displays the data aquired from running the top_comments() method."""
 
     f = open('comment_data.txt', 'w')
-    top_comments_data = self.top_comments(post_relevance, num_posts)
+    top_comments_data = collected_data
 
     for data in top_comments_data:
         f.write(fm.big_separator_1())
