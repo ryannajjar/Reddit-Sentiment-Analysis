@@ -1,4 +1,10 @@
 __pycache__
 .DS_Store
 env
-test.pycreds.py
+test.py
+creds.py
+title_data.txt
+body_data.txt
+comment_data.txt
+comment_replies_data.txt
+votes_data.txt
