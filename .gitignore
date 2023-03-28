@@ -4,6 +4,7 @@ env
 test.py
 creds.py
 title_data.txt
+title_data.md
 body_data.txt
 comment_data.txt
 comment_replies_data.txt
