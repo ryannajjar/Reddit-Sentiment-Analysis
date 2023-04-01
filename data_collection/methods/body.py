@@ -16,18 +16,21 @@ def body(subreddit, post_relevance, num_posts=1): # function is not complete, ch
     for submission in eval(f'reddit.subreddit("{subreddit}").{post_relevance}(limit={num_posts})'):
         body_list = []
 
+        # for posts without text that link to something else
         if submission.selftext == '' and submission.is_self is False:
             body_list.append((
                 'THE POST DOES NOT HAVE ANY TEXT TO RUN SENTIMENT ANALYSIS ON',
                 '',
                 submission.url
             ))
+        # for posts without text that do not link to something else
         elif submission.selftext == '':
             body_list.append((
                 'THE POST DOES NOT HAVE ANY TEXT TO RUN SENTIMENT ANALYSIS ON', 
                 '',
                 ''
                 ))
+        # for posts with text that link to something else
         elif submission.selftext and submission.is_self is False:
             postbody_doc = nlp(submission.selftext)
             body_list.append((
@@ -35,6 +38,7 @@ def body(subreddit, post_relevance, num_posts=1): # function is not complete, ch
                 postbody_doc._.blob.polarity,
                 submission.url
             ))
+        # for posts with text that do not link to something else
         elif submission.selftext:
             postbody_doc = nlp(submission.selftext)
             body_list.append((
