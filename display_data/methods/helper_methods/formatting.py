@@ -10,8 +10,8 @@ def big_separator_2():
 def mini_separator_1():
     return '*' * 100 + '\n' * 2 + '*' * 100 + '\n'
 
-def mini_separator_2(ind=False):
-    return '\n' + ('\t' if ind else '') + '*' * 100 + '\n'
+def mini_separator_2(ind=False, md=False):
+    return '\n' + ('\t' if ind else '') + ('<hr>' if md else '*' * 100) + '\n'
 
 def mini_separator_3():
     return '*' * 100 + '\n'
