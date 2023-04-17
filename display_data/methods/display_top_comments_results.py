@@ -2,7 +2,7 @@
 import display_data.methods.helper_methods.formatting as fm
 
 
-def display_top_comments_results_temp(collected_data, type, append=False):
+def display_top_comments_results(collected_data, type, append=False):
     """Displays the data aquired from running the top_comments() method."""
 
     # check the type of file the user requested and open the appropriate files
